@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  username String  @id @db.VarChar(100)
+  password String  @db.VarChar(100)
+  name     String  @db.VarChar(100)
+  token    String? @db.VarChar(100)
+
+  @@map("users")
+}
+
+model Contact {
+  id              String      @id
+  full_name       String      @db.VarChar(100)
+  email           String?     @db.VarChar(200)
+  phone           String?     @db.VarChar(20)
+  id_destinastion String
+  destination     Destination @relation(fields: [id_destinastion], references: [name_hotel])
+
+  @@map("contacts")
+}
+
+model Address {
+  id             Int     @id @default(autoincrement())
+  city           String? @db.VarChar(100)
+  place_of_birth String? @db.VarChar(255)
+  date_of_birth  String? @db.VarChar(255)
+  country        String  @db.VarChar(100)
+  postal_code    String  @db.VarChar(10)
+  contact_id     Int
+
+  @@map("addresses")
+}
+
+model Destination {
+  name_hotel        String    @id
+  hotel_addres      String    @db.VarChar(100)
+  guide_name        String    @db.VarChar(100)
+  price             String    @db.VarChar(100)
+  vehicle_name      String    @db.VarChar(100)
+  destination_price String    @db.VarChar(100)
+  police_number     String    @db.VarChar(100)
+  contact           Contact[]
+
+  @@map("destination")
+}
